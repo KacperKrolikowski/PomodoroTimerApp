@@ -1,7 +1,8 @@
-package com.krolikowski.pomodorotimerapp
+package com.krolikowski.pomodorotimerapp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.krolikowski.pomodorotimerapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
