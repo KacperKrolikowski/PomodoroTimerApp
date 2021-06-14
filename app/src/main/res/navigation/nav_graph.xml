@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/quickPomodoroFragment">
+
+    <fragment
+        android:id="@+id/quickPomodoroFragment"
+        android:name="com.krolikowski.pomodorotimerapp.ui.fragments.QuickPomodoroFragment"
+        android:label="QuickPomodoroFragment" />
+    <fragment
+        android:id="@+id/pomodoroEditFragment"
+        android:name="com.krolikowski.pomodorotimerapp.ui.fragments.PomodoroEditFragment"
+        android:label="PomodoroEditFragment" >
+        <argument
+            android:name="pomodoroToEdit"
+            app:argType="com.krolikowski.pomodorotimerapp.data.db.entities.SinglePomodoro" />
+    </fragment>
+    <fragment
+        android:id="@+id/pomodoroListFragment"
+        android:name="com.krolikowski.pomodorotimerapp.ui.fragments.PomodoroListFragment"
+        android:label="PomodoroListFragment" >
+        <action
+            android:id="@+id/action_pomodoroListFragment_to_pomodoroEditFragment"
+            app:destination="@id/pomodoroEditFragment" />
+        <action
+            android:id="@+id/action_pomodoroListFragment_to_pomodoroFromListFragment"
+            app:destination="@id/pomodoroFromListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/preferencesFragment"
+        android:name="com.krolikowski.pomodorotimerapp.ui.fragments.PreferencesFragment"
+        android:label="PreferencesFragment" />
+    <fragment
+        android:id="@+id/pomodoroFromListFragment"
+        android:name="com.krolikowski.pomodorotimerapp.ui.fragments.PomodoroFromListFragment"
+        android:label="PomodoroFromListFragment" >
+        <argument
+            android:name="pomodoro"
+            app:argType="com.krolikowski.pomodorotimerapp.data.db.entities.SinglePomodoro" />
+    </fragment>
+</navigation>
