@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PomodoroTimerApp</string>
+
+    <string-array name="application_languages_list">
+        <item>Polski</item>
+        <item>English</item>
+    </string-array>
 </resources>
