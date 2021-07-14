@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PomodoroTimerApp</string>
+    <string name="quick_pomodoro_settings">Ustawienia domyślnego Pomodoro</string>
+    <string name="pick_time_of_single_pomodoro">Ustaw czas pojedynczego Pomodoro</string>
+    <string name="pick_quantity_of_pomodoro_in_one_session">Ustaw ilość sesji Pomodoro</string>
+    <string name="application_settings">Ustawienia aplikacji</string>
+    <string name="application_language">Język aplikacji</string>
+    <string name="save">Zapisz</string>
+    <string name="settings">Ustawienia</string>
+</resources>

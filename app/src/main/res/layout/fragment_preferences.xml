@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Quick pomodoro settings"
+        android:text="@string/quick_pomodoro_settings"
         android:textSize="28sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Pick time of single pomodoro">
+        android:hint="@string/pick_time_of_single_pomodoro">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/quick_pomodoro_settings_time"
@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Pick quantity of pomodoro in one session">
+        android:hint="@string/pick_quantity_of_pomodoro_in_one_session">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/quick_pomodoro_settings_quantity"
@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="Application settings"
+        android:text="@string/application_settings"
         android:textSize="28sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="Application language">
+        android:hint="@string/application_language">
 
         <AutoCompleteTextView
             android:id="@+id/pomodoro_application_language"
@@ -75,7 +75,7 @@
         android:id="@+id/quick_pomodoro_settings_save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="Save"/>
+        android:layout_marginStart="8dp"
+        android:text="@string/save"/>
 
 </LinearLayout>

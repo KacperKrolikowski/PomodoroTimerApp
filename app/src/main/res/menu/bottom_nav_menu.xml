@@ -4,16 +4,16 @@
     <item
         android:id="@+id/pomodoroListFragment"
         android:title="Your pomodoros"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_list"/>
 
     <item
         android:id="@+id/quickPomodoroFragment"
         android:title="Quick Pomodoro"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_timer"/>
 
     <item
         android:id="@+id/preferencesFragment"
-        android:title="Settings"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings"/>
 
 </menu>

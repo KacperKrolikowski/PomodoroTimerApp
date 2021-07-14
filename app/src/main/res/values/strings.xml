@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">PomodoroTimerApp</string>
+    <string name="quick_pomodoro_settings">Quick pomodoro settings</string>
+    <string name="pick_time_of_single_pomodoro">Pick time of single pomodoro</string>
+    <string name="pick_quantity_of_pomodoro_in_one_session">Pick quantity of pomodoro in one session</string>
+    <string name="application_settings">Application settings</string>
+    <string name="application_language">Application language</string>
+    <string name="save">Save</string>
+    <string name="settings">Settings</string>
 
     <string-array name="application_languages_list">
         <item>Polski</item>
