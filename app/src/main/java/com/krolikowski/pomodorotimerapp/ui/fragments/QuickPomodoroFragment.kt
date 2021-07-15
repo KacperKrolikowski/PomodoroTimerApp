@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import com.krolikowski.pomodorotimerapp.R
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.QuickPomodoroViewModel
 import kotlinx.android.synthetic.main.fragment_preferences.*
@@ -34,6 +35,8 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
         start_pause_button.setOnClickListener {
             pomodoroTimer()
+            Snackbar.make(requireView(), getString(R.string.test_text), Snackbar.LENGTH_SHORT)
+                .show()
         }
 
     }

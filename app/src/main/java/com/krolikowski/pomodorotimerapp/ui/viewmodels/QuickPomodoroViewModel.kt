@@ -15,6 +15,8 @@ class QuickPomodoroViewModel(application: Application): AndroidViewModel(applica
     val readFromDataStoreTime = repository.readQuickPomodoroTime.asLiveData()
     val readFromDataStoreQuantity = repository.readQuickPomodoroQuantity.asLiveData()
 
+    val getLanguage = repository.readApplicationLanguage
+
     val readApplicationLanguage = repository.readApplicationLanguage.asLiveData()
 
     fun saveToDataStore(time: String, quantity: String, language: String) = viewModelScope.launch(Dispatchers.IO){
