@@ -6,11 +6,16 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.krolikowski.pomodorotimerapp.R
+import com.krolikowski.pomodorotimerapp.data.repositories.PomodoroTimerRepository
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.PomodoroTimerViewModel
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.QuickPomodoroViewModel
 import kotlinx.android.synthetic.main.fragment_quick_pomodoro.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
@@ -20,7 +25,8 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
     private lateinit var timer: CountDownTimer
     private var timerLengthSeconds = 0L
-    private var timerState = PomodoroTimerState.Stopped
+    private var timerSecondsRemaining = 0L
+    private var timerState = "Stopped"
 
     private lateinit var preferenceViewModel: QuickPomodoroViewModel
     private lateinit var pomodoroTimerViewModel: PomodoroTimerViewModel
@@ -28,11 +34,14 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
     object qtPomodoro{
         var qpTime = 0
         var qpQuantity = 0
+        var qpSecondsRemaining = 0L
+        var qpTimerState: String = "Running"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        pomodoroTimerViewModel = ViewModelProvider(this).get(PomodoroTimerViewModel::class.java)
         preferenceViewModel = ViewModelProvider(this).get(QuickPomodoroViewModel::class.java)
         getPreferences()
 
@@ -41,14 +50,22 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
     override fun onPause() {
         super.onPause()
 
-        if(timerState == PomodoroTimerState.Running){
+        if(timerState == "Running"){
             timer.cancel()
-        } else if (timerState == PomodoroTimerState.Paused){
+        } else if (timerState == "Paused"){
 
         }
 
         pomodoroTimerViewModel.saveTimerPreviousLength(timerLengthSeconds)
+        pomodoroTimerViewModel.saveTimerSecondsRemaining(timerSecondsRemaining)
+        pomodoroTimerViewModel.saveTimerState(timerState)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        initTimer()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,7 +105,7 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
     private fun startPomodoro(){
 
-        timerState = PomodoroTimerState.Running
+        timerState = "Running"
 
         Snackbar.make(requireView(), qtPomodoro.qpTime.toString(), Snackbar.LENGTH_SHORT)
             .show()
@@ -97,20 +114,40 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
     private fun pausePomodoro(){
 
-        timerState = PomodoroTimerState.Paused
+        timerState = "Paused"
         timer.cancel()
 
     }
 
     private fun stopPomodoro(){
 
-        timerState = PomodoroTimerState.Stopped
+        timerState = "Stopped"
         timer.cancel()
 
 
     }
 
     private fun breakPomodoro(){
+
+    }
+
+    private fun initTimer(){
+        pomodoroTimerViewModel.readFromTimerDataStoreTimerState.observe(this, {
+            qtPomodoro.qpTimerState = it
+            Log.d("DEBUG", qtPomodoro.qpTimerState)
+            if (qtPomodoro.qpTimerState == "Stopped"){
+                //setNewTimer()
+            } else{
+                //setPreviousTimer()
+            }
+
+        })
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            val state = pomodoroTimerViewModel.getState()
+
+            Log.d("DEBUGG", state)
+        }
 
     }
 

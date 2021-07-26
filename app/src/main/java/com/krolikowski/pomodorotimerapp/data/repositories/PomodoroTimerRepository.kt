@@ -4,8 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.datastore.DataStore
 import androidx.datastore.preferences.*
+import com.krolikowski.pomodorotimerapp.ui.fragments.QuickPomodoroFragment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -16,7 +18,7 @@ class PomodoroTimerRepository(context: Context) {
     private object TimerKeys{
         val timerPreviousLength = preferencesKey<Long>("timer_previous")
         val timerState = preferencesKey<String>("timer_state")
-        val timerSecondsRemaining = preferencesKey<String>("timer_seconds_remaining")
+        val timerSecondsRemaining = preferencesKey<Long>("timer_seconds_remaining")
     }
 
     private val dataStore: DataStore<Preferences> = context.createDataStore(
@@ -24,7 +26,7 @@ class PomodoroTimerRepository(context: Context) {
     )
 
     //Timer
-    suspend fun saveTimerDataToDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: String){
+    suspend fun saveTimerDataToDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long){
         dataStore.edit { preference ->
             preference[TimerKeys.timerPreviousLength] = timerPreviousLength
             preference[TimerKeys.timerState] = timerState
@@ -35,6 +37,18 @@ class PomodoroTimerRepository(context: Context) {
     suspend fun saveTimerPreviousLength(timerPreviousLength: Long){
         dataStore.edit { preference ->
             preference[TimerKeys.timerPreviousLength] = timerPreviousLength
+        }
+    }
+
+    suspend fun saveTimerState(timerState: String){
+        dataStore.edit { preference ->
+            preference[TimerKeys.timerState] = timerState
+        }
+    }
+
+    suspend fun saveTimerSecondsRemaining(timerSecondsRemaining: Long){
+        dataStore.edit { preference ->
+            preference[TimerKeys.timerSecondsRemaining] = timerSecondsRemaining
         }
     }
 
@@ -62,11 +76,11 @@ class PomodoroTimerRepository(context: Context) {
             }
         }
         .map { preferences ->
-            val timerState = preferences[TimerKeys.timerState] ?: "25"
+            val timerState = preferences[TimerKeys.timerState] ?: "Stopped"
             timerState
         }
 
-    val readTimerSecondsRemaining: Flow<String> = dataStore.data
+    val readTimerSecondsRemaining: Flow<Long> = dataStore.data
         .catch { exception ->
             if (exception is IOException){
                 Log.d("DEBUG_DATASTORE", exception.message.toString())
@@ -76,8 +90,26 @@ class PomodoroTimerRepository(context: Context) {
             }
         }
         .map { preferences ->
-            val timerSecondsRemaining = preferences[TimerKeys.timerSecondsRemaining] ?: "25"
+            val timerSecondsRemaining = preferences[TimerKeys.timerSecondsRemaining] ?: 0L
             timerSecondsRemaining
         }
+
+    suspend fun readState(): String {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val timerState = preferences[TimerKeys.timerState] ?: "Stopped"
+                timerState
+            }
+        return valueFlow.first()
+    }
+
 
 }
