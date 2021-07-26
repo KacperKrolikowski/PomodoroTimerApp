@@ -1,21 +1,14 @@
 package com.krolikowski.pomodorotimerapp.ui.fragments
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.krolikowski.pomodorotimerapp.R
-import com.krolikowski.pomodorotimerapp.ui.MainActivity
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.QuickPomodoroViewModel
 import kotlinx.android.synthetic.main.fragment_preferences.*
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import java.util.*
 
 class PreferencesFragment: Fragment(R.layout.fragment_preferences) {

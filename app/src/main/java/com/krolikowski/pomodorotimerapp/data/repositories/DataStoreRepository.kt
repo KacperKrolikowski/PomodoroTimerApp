@@ -25,6 +25,7 @@ class DataStoreRepository(context: Context) {
         name = PREFERENCE_NAME
     )
 
+    //Preferences
     suspend fun saveToDataStore(time: String, quantity: String, language: String){
         dataStore.edit { preference ->
             preference[PreferencesKeys.time] = time
