@@ -69,6 +69,7 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
         if(timerState == "Running"){
             timer.cancel()
+            val wakeUpTime = setAlarm(requireContext(), nowSeconds, timerSecondsRemaining)
         } else if (timerState == "Paused"){
 
         }
@@ -83,6 +84,8 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
         super.onResume()
 
         initTimer()
+        removeAlarm(requireContext())
+
     }
 
     private fun getPreferences(){
@@ -117,9 +120,14 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
                 timerLengthSeconds
             }
 
-            Log.d(deb_pom, timerSecondsRemaining.toString())
+            val alarmSetTime = pomodoroTimerViewModel.getTimerAlarmTime()
+            if (alarmSetTime > 0){
+                timerSecondsRemaining -= nowSeconds - alarmSetTime
+            }
 
-            if (timerState == "Running"){
+            if (timerSecondsRemaining <= 0){
+                onTimerFinished()
+            } else if (timerState == "Running"){
                 startPomodoro()
             }
             updateButtons()
