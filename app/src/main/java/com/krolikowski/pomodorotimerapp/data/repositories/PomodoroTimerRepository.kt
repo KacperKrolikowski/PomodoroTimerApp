@@ -19,6 +19,7 @@ class PomodoroTimerRepository(context: Context) {
         val timerPreviousLength = preferencesKey<Long>("timer_previous")
         val timerState = preferencesKey<String>("timer_state")
         val timerSecondsRemaining = preferencesKey<Long>("timer_seconds_remaining")
+        val timerAlarmTime = preferencesKey<Long>("timer_alarm_time")
     }
 
     private val dataStore: DataStore<Preferences> = context.createDataStore(
@@ -26,17 +27,24 @@ class PomodoroTimerRepository(context: Context) {
     )
 
     //Timer
-    suspend fun saveTimerDataToDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long){
+    suspend fun saveTimerDataToDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long, timerAlarmTime: Long){
         dataStore.edit { preference ->
             preference[TimerKeys.timerPreviousLength] = timerPreviousLength
             preference[TimerKeys.timerState] = timerState
             preference[TimerKeys.timerSecondsRemaining] = timerSecondsRemaining
+            preference[TimerKeys.timerAlarmTime] = timerAlarmTime
         }
     }
 
     suspend fun saveTimerPreviousLength(timerPreviousLength: Long){
         dataStore.edit { preference ->
             preference[TimerKeys.timerPreviousLength] = timerPreviousLength
+        }
+    }
+
+    suspend fun saveAlarmTime(timerAlarmTime: Long){
+        dataStore.edit { preference ->
+            preference[TimerKeys.timerAlarmTime] = timerAlarmTime
         }
     }
 
@@ -100,6 +108,23 @@ class PomodoroTimerRepository(context: Context) {
             .map { preferences ->
                 val timerPreviousLength = preferences[TimerKeys.timerPreviousLength] ?: 0L
                 timerPreviousLength
+            }
+        return valueFlow.first()
+    }
+
+    suspend fun readTimerAlarmTime(): Long {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val timerAlarmTime = preferences[TimerKeys.timerAlarmTime] ?: 0L
+                timerAlarmTime
             }
         return valueFlow.first()
     }

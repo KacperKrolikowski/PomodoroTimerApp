@@ -18,10 +18,15 @@ class PomodoroTimerViewModel(application: Application): AndroidViewModel(applica
     suspend fun getTimerState() = repository.readTimerState()
     suspend fun getTimerSecondsRemaining() = repository.readTimerSecondsRemaining()
     suspend fun getTimerPreviousLength() = repository.readTimerPreviousLength()
+    suspend fun getTimerAlarmTime() = repository.readTimerAlarmTime()
 
     //Save
-    fun saveToTimerDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long) = viewModelScope.launch(Dispatchers.IO) {
-        repository.saveTimerDataToDataStore(timerPreviousLength, timerState, timerSecondsRemaining)
+    fun saveToTimerDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long, timerAlarmTime: Long) = viewModelScope.launch(Dispatchers.IO) {
+        repository.saveTimerDataToDataStore(timerPreviousLength, timerState, timerSecondsRemaining, timerAlarmTime)
+    }
+
+    fun saveTimerAlarmTime(timerAlarmTime: Long) = viewModelScope.launch(Dispatchers.IO){
+        repository.saveAlarmTime(timerAlarmTime)
     }
 
     fun saveTimerPreviousLength(timerPreviousLength: Long) = viewModelScope.launch(Dispatchers.IO) {

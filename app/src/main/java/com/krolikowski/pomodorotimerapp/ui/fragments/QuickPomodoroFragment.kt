@@ -1,5 +1,9 @@
 package com.krolikowski.pomodorotimerapp.ui.fragments
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
@@ -9,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import com.krolikowski.pomodorotimerapp.R
+import com.krolikowski.pomodorotimerapp.data.repositories.PomodoroTimerRepository
+import com.krolikowski.pomodorotimerapp.others.TimerExpiredReceiver
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.PomodoroTimerViewModel
 import com.krolikowski.pomodorotimerapp.ui.viewmodels.QuickPomodoroViewModel
 import kotlinx.android.synthetic.main.fragment_quick_pomodoro.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.util.*
 
 class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
 
@@ -212,5 +218,30 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
             }
         }
     }
+
+    fun setAlarm(context: Context, nowSeconds: Long, secondsRemaining: Long): Long{
+        val wakeUpTime = (nowSeconds + secondsRemaining) * 1000
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, TimerExpiredReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, wakeUpTime, pendingIntent)
+        lifecycleScope.launch(Dispatchers.IO){
+            pomodoroTimerViewModel.saveTimerAlarmTime(nowSeconds)
+        }
+        return wakeUpTime
+    }
+
+    fun removeAlarm(context: Context){
+        val intent = Intent(context, TimerExpiredReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+        lifecycleScope.launch(Dispatchers.IO){
+            pomodoroTimerViewModel.saveTimerAlarmTime(0)
+        }
+    }
+
+    val nowSeconds: Long
+        get() = Calendar.getInstance().timeInMillis / 1000
 
 }
