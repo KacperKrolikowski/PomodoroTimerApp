@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import com.krolikowski.pomodorotimerapp.data.db.entities.SinglePomodoro
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -75,5 +76,22 @@ class DataStoreRepository(context: Context) {
             val applicationLanguage = preferences[PreferencesKeys.language] ?: "English"
             applicationLanguage
         }
+
+    suspend fun readQuickPomodoroTime(): String {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val quickPomodoroTime = preferences[PreferencesKeys.time] ?: "25"
+                quickPomodoroTime
+            }
+        return valueFlow.first()
+    }
 
 }

@@ -12,6 +12,8 @@ class QuickPomodoroViewModel(application: Application): AndroidViewModel(applica
 
     private val repository = DataStoreRepository(application)
 
+    suspend fun readQuickPomodoroTime() = repository.readQuickPomodoroTime()
+
     val readFromDataStoreTime = repository.readQuickPomodoroTime.asLiveData()
     val readFromDataStoreQuantity = repository.readQuickPomodoroQuantity.asLiveData()
 

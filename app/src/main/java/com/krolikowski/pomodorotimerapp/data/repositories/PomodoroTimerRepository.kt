@@ -52,6 +52,59 @@ class PomodoroTimerRepository(context: Context) {
         }
     }
 
+
+    suspend fun readTimerState(): String {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val timerState = preferences[TimerKeys.timerState] ?: "Stopped"
+                timerState
+            }
+        return valueFlow.first()
+    }
+
+    suspend fun readTimerSecondsRemaining(): Long {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val timerSeconds = preferences[TimerKeys.timerSecondsRemaining] ?: 0L
+                timerSeconds
+            }
+        return valueFlow.first()
+    }
+
+    suspend fun readTimerPreviousLength(): Long {
+        val valueFlow = dataStore.data
+            .catch { exception ->
+                if (exception is IOException){
+                    Log.d("DEBUG_DATASTORE", exception.message.toString())
+                    emit(emptyPreferences())
+                }else{
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                val timerPreviousLength = preferences[TimerKeys.timerPreviousLength] ?: 0L
+                timerPreviousLength
+            }
+        return valueFlow.first()
+    }
+
+    /*
     val readTimerPreviousLength: Flow<Long> = dataStore.data
         .catch { exception ->
             if (exception is IOException){
@@ -94,22 +147,7 @@ class PomodoroTimerRepository(context: Context) {
             timerSecondsRemaining
         }
 
-    suspend fun readState(): String {
-        val valueFlow = dataStore.data
-            .catch { exception ->
-                if (exception is IOException){
-                    Log.d("DEBUG_DATASTORE", exception.message.toString())
-                    emit(emptyPreferences())
-                }else{
-                    throw exception
-                }
-            }
-            .map { preferences ->
-                val timerState = preferences[TimerKeys.timerState] ?: "Stopped"
-                timerState
-            }
-        return valueFlow.first()
-    }
+     */
 
 
 }

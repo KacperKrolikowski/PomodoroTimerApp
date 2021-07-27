@@ -14,12 +14,12 @@ class PomodoroTimerViewModel(application: Application): AndroidViewModel(applica
 
     private val repository = PomodoroTimerRepository(application)
 
-    val readFromTimerDataStoreTimerPreviousLength = repository.readTimerPreviousLength.asLiveData()
-    val readFromTimerDataStoreTimerState = repository.readTimerState.asLiveData()
-    val readFromTimerDataStoreTimerSecondsRemaining = repository.readTimerSecondsRemaining.asLiveData()
+    //Read
+    suspend fun getTimerState() = repository.readTimerState()
+    suspend fun getTimerSecondsRemaining() = repository.readTimerSecondsRemaining()
+    suspend fun getTimerPreviousLength() = repository.readTimerPreviousLength()
 
-    suspend fun getState() = repository.readState()
-
+    //Save
     fun saveToTimerDataStore(timerPreviousLength: Long, timerState: String, timerSecondsRemaining: Long) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveTimerDataToDataStore(timerPreviousLength, timerState, timerSecondsRemaining)
     }
