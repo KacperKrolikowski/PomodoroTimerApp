@@ -1,7 +1,9 @@
 package com.krolikowski.pomodorotimerapp.ui.viewmodels
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.krolikowski.pomodorotimerapp.data.repositories.PomodoroTimerRepository
@@ -10,9 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class PomodoroTimerViewModel(application: Application): AndroidViewModel(application) {
+class PomodoroTimerViewModel(context: Context): ViewModel() {
 
-    private val repository = PomodoroTimerRepository(application)
+    private val repository = PomodoroTimerRepository(context)
 
     //Read
     suspend fun getTimerState() = repository.readTimerState()

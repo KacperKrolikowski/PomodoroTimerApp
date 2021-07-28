@@ -37,7 +37,7 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        pomodoroTimerViewModel = ViewModelProvider(this).get(PomodoroTimerViewModel::class.java)
+        pomodoroTimerViewModel = PomodoroTimerViewModel(requireContext())
         preferenceViewModel = ViewModelProvider(this).get(QuickPomodoroViewModel::class.java)
         getPreferences()
 
@@ -84,6 +84,7 @@ class QuickPomodoroFragment: Fragment(R.layout.fragment_quick_pomodoro) {
         super.onResume()
 
         initTimer()
+        updateButtons()
         removeAlarm(requireContext())
 
     }
