@@ -25,8 +25,6 @@ class TimerService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        Log.d("DEBUG_SERVICE", "here")
-
         /*
         val notificationIntent = Intent(this, QuickPomodoroFragment::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -61,12 +59,22 @@ class TimerService: Service() {
     override fun onDestroy() {
 
         timer.cancel()
+
+        val backTimeIntent = Intent(TIMER_STATE)
+        backTimeIntent.putExtra(TIMER_PAUSED_TIME, timeToCount)
+        sendBroadcast(backTimeIntent)
+
+        Log.d("DEBUG_SERVICE2", timeToCount.toString())
+
+
         super.onDestroy()
     }
 
     companion object{
         const val TIMER_UPDATE = "timerUpdate"
         const val TIME_EXTRA = "timeExtra"
+        const val TIMER_STATE = "timerState"
+        const val TIMER_PAUSED_TIME = "timerPausedTime"
     }
 
 }
